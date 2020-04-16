@@ -19,21 +19,9 @@ html, body {
 }
 
 body {
-  background-color: #777;
+  background-color: #000;
   font-family: "Roboto Slab", serif;
 }
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
   font-family: "Open Sans", sans-serif;
-}
-
-header{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 10vh;
-  background-color: #000;
-  color: #fff;
-}
-header h1 {
-  font-size: 4rem;
 }

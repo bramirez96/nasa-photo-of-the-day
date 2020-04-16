@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 
 import "./App.css";
@@ -9,7 +10,7 @@ const _API_KEY = "5vw5cIs9ndBnZScVo0cjhNgkgnQWc8M6EWbKuAsz";
 const _API_URL = `https://api.nasa.gov/planetary/apod?api_key=${_API_KEY}&date=`;
 
 function App(props) {
-  let images = [
+  const [images, setImages] = useState([
     {
       copyright: "ScottAspinall",
       date: "2020-04-15",
@@ -55,7 +56,14 @@ function App(props) {
       title: "The Horsehead Nebula in Infrared from Hubble",
       url: "https://apod.nasa.gov/apod/image/2004/horseheadir_hubble_960.jpg",
     },
-  ];
+  ]);
+
+  const [toolbarShow, setToolbarShow] = useState(true);
+
+  const toggleToolbar = () => {
+    return setToolbarShow(!toolbarShow);
+  };
+
   /*useEffect(() => {
     // dates.forEach((date) => {
     axios
@@ -71,36 +79,98 @@ function App(props) {
 
   return (
     <div className="App">
-      <Gallery images={images} />
+      <Carousel images={images} show={toolbarShow} toggle={toggleToolbar} />
     </div>
   );
 }
 
-function Gallery(props) {
-  const { images } = props;
-  console.log(images)
+function Carousel(props) {
+  const { images, show, toggle } = props;
+  let count = 0;
+
   return (
-    <div className="Gallery">
-      {images.map((image) => {
-        return <Card image={image} key={image.date} />;
+    <div className="Carousel">
+      {images.map((x) => {
+        {
+          count++;
+        }
+        return (
+          <GalleryImage
+            url={x.hdurl}
+            key={count}
+            className={count === 1 ? "show" : "hide"}
+          />
+        );
       })}
+      <Toolbar />
     </div>
   );
 }
 
-function Card(props) {
-  const { image } = props;
-  console.log(image);
+const GalleryImage = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("${(props) => props.url}") no-repeat center center;
+  background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  -webkit-background-size: contain;
+  transition: opacity 1s ease-in-out;
+  &.show {
+    opacity: 1;
+  }
+  &.hide {
+    opacity: 0;
+  }
+`;
+
+function Toolbar(props) {
   return (
-    <div className="Card">
-      <h2>{image.title}</h2>
-      <h3>
-        {image.date}
-      </h3>
-      <p>{image.explanation}</p>
-      <img src={image.url} />
+    <div className="Toolbar">
+      <Controls>
+        <div className="arrow-button">&#x293A;</div>
+        <div className="content">
+          lorem ispainfsdads asdfjibhnaf asodiuabsfd asdfjlsf asdf sdf sd fgsadf
+          asdf gs sfd g zxcvs sdeflki asdf asfd lasfkidhjasflkjasfd asfgdlksjfd
+          sdkjlh ssdflkhj dslk fs lof bslgf aljv laf lajvg lajv aljvf a
+        </div>
+        <div className="arrow-button">&#x293B;</div>
+      </Controls>
     </div>
   );
 }
+
+const Controls = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 15vh;
+  background-color: rgba(20, 20, 20, 0.9);
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: opacity 1s ease-in-out;
+
+  &.true {
+    opacity: 1;
+  }
+  &.false {
+    opacity: 0;
+  }
+
+  .content {
+    flex-grow: 2;
+  }
+  .arrow-button {
+    font-size: 3rem;
+    padding: 20px;
+    cursor: pointer;
+  }
+`;
 
 export default App;
