@@ -6,34 +6,13 @@ import "./App.css";
 
 import dates from "./assets/dateData";
 
-const _API_KEY = "5vw5cIs9ndBnZScVo0cjhNgkgnQWc8M6EWbKuAsz";
+// const _API_KEY = "5vw5cIs9ndBnZScVo0cjhNgkgnQWc8M6EWbKuAsz";
+const _API_KEY = "NZTi5mupndXtMPERNah8DajY21FsTXmc5dmUguqI";
 const _API_URL = `https://api.nasa.gov/planetary/apod?api_key=${_API_KEY}&date=`;
 
 function App(props) {
+  // Need to replace this with API pull
   const [images, setImages] = useState([
-    {
-      copyright: "ScottAspinall",
-      date: "2020-04-15",
-      explanation:
-        "It was an astronomical triple play. Setting on the left, just after sunset near the end of last month, was our Moon -- showing a bright crescent phase.  Setting on the right was Venus, the brightest planet in the evening sky last month -- and this month, too.  With a small telescope, you could tell that Venus' phase was half, meaning that only half of the planet, as visible from Earth, was exposed to direct sunlight and brightly lit. High above and much further in the distance was the Pleiades star cluster.  Although the Moon and Venus move with respect to the background stars, the Pleiades do not -- because they are background stars. In the beginning of this month, Venus appeared to move right in front of the Pleiades, a rare event that happens only once every eight years.  The featured image captured this cosmic triangle with a series of exposures taken from the same camera over 70 minutes near Avonlea, Saskatchewan, Canada. The positions of the celestial objects was predicted. The only thing unpredicted was the existence of the foreground tree -- and the astrophotographer is still unsure what type of tree that is.",
-      hdurl: "https://apod.nasa.gov/apod/image/2004/MVP_Aspinall_2048.jpg",
-      media_type: "image",
-      service_version: "v1",
-      title: "A Cosmic Triangle",
-      url: "https://apod.nasa.gov/apod/image/2004/MVP_Aspinall_960.jpg",
-    },
-    {
-      date: "2020-04-14",
-      explanation:
-        "NGC 253 is one of the brightest spiral galaxies visible, but also one of the dustiest.  Dubbed the Silver Coin for its appearance in smalltelescopes, it is more formally known as the Sculptor Galaxy for its location within the boundaries of the southern constellation Sculptor.  Discovered in 1783 by mathematician and astronomer Caroline Herschel, the dusty island universe lies a mere 10 million light-years away. About 70 thousand light-years across, NGC 253, pictured, is the largest member of the Sculptor Group of Galaxies, the nearest to our own Local Group of galaxies.  In addition to its spiral dust lanes, tendrils of dust seem to be rising from a galactic disk laced with young star clusters and star forming regions in this sharp color image. The high dust content accompanies frantic star formation, earning NGC 253 the designation of a starburst galaxy. NGC 253 is also known to be a strong source of high-energy x-rays and gamma rays, likely due to massive black holes near the galaxy's center. Take a trip through extragalactic space in this short video flyby of NGC 253.   Astrophysicists: Browse 2,100+ codes in the Astrophysics Source Code Library",
-      hdurl:
-        "https://apod.nasa.gov/apod/image/2004/NGC253_HstSubaruEsoNew_3500.jpg",
-      media_type: "image",
-      service_version: "v1",
-      title: "NGC 253: The Silver Coin Galaxy",
-      url:
-        "https://apod.nasa.gov/apod/image/2004/NGC253_HstSubaruEsoNew_960.jpg",
-    },
     {
       date: "2020-04-13",
       explanation:
@@ -45,64 +24,107 @@ function App(props) {
       title: "A Sailing Stone across Death Valley",
       url: "https://apod.nasa.gov/apod/image/2004/SailingStone_Burke_960.jpg",
     },
-    {
-      date: "2020-04-12",
-      explanation:
-        "While drifting through the cosmos, a magnificent interstellar dust cloud became sculpted by stellar winds and radiation to assume a recognizable shape.  Fittingly named the Horsehead Nebula, it is embedded in the vast and complex Orion Nebula (M42).  A potentially rewarding but difficult object to view personally with a small telescope, the above gorgeously detailed image was taken in 2013 in infrared light by the orbiting Hubble Space Telescope in honor of the 23rd anniversary of Hubble's launch. The dark molecular cloud, roughly 1,500 light years distant, is cataloged as Barnard 33 and is seen above primarily because it is backlit by the nearby massive star Sigma Orionis. The Horsehead Nebula will slowly shift its apparent shape over the next few million years and will eventually be destroyed by the high energy starlight.   April:  (AWB's) Global Astronomy Month",
-      hdurl:
-        "https://apod.nasa.gov/apod/image/2004/horseheadir_hubble_1225.jpg",
-      media_type: "image",
-      service_version: "v1",
-      title: "The Horsehead Nebula in Infrared from Hubble",
-      url: "https://apod.nasa.gov/apod/image/2004/horseheadir_hubble_960.jpg",
-    },
   ]);
 
-  const [toolbarShow, setToolbarShow] = useState(true);
+  // const requests = dates.map((date) => {
+  //   return axios.get(`${_API_URL + date}`);
+  // });
 
-  const toggleToolbar = () => {
-    return setToolbarShow(!toolbarShow);
+  const newData = [];
+
+  // useEffect(() => {
+  //   axios
+  //     .all(requests)
+  //     .then(
+  //       axios.spread((...responses) => {
+  //         responses.forEach((res) => {
+  //           newData.push(res.data);
+  //         });
+  //         setImages(newData);
+  //       })
+  //     )
+  //     .catch((err) => {
+  //       alert(`ERROR ${err.response.status}: ${err.response.statusText}`);
+  //     });
+  // }, []);
+
+  // State Controllers for Toolbar Display
+  const [toolbarShow, setToolbarShow] = useState(false);
+
+  // State Controllers for current picture
+  const [currentIndex, setCurrentIndex] = useState(0);
+  /**
+   *
+   * @param {string} direction contains "left" or "right"
+   */
+  const changeImage = (direction) => {
+    if (direction === "left") {
+      // Increments array
+      setCurrentIndex(
+        currentIndex + 1 === images.length ? 0 : currentIndex + 1
+      );
+    } else if (direction === "right") {
+      // Decrements array
+      setCurrentIndex(
+        currentIndex === 0 ? images.length - 1 : currentIndex - 1
+      );
+    } else {
+      // Error?
+    }
   };
 
-  /*useEffect(() => {
-    // dates.forEach((date) => {
-    axios
-      .get(`${_API_URL + dates[1]}`)
-      .then((res) => {
-        images.push(res.data);
-      })
-      .catch((err) => {
-        alert(`Error ${err.status}: Try Again`);
-      });
-    // });
-  }, [images]);*/
+  const keyPressHandler = (event) => {
+    if (event.key === "ArrowRight") changeImage("right");
+    if (event.key === "ArrowLeft") changeImage("left");
+    console.log(event.key)
+  }
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyPressHandler);
+    return () => {
+      document.removeEventListener("keydown", keyPressHandler);
+    };
+  }, []);
 
   return (
     <div className="App">
-      <Carousel images={images} show={toolbarShow} toggle={toggleToolbar} />
+      <Carousel
+        images={images}
+        show={toolbarShow}
+        tbShow={setToolbarShow}
+        index={currentIndex}
+        changeImage={changeImage}
+      />
     </div>
   );
 }
 
 function Carousel(props) {
-  const { images, show, toggle } = props;
-  let count = 0;
+  const { images, show, tbShow, index, changeImage } = props;
+
+  const toggle = (event) => {
+    tbShow(!show);
+  };
 
   return (
     <div className="Carousel">
-      {images.map((x) => {
-        {
-          count++;
-        }
+      {images.map((x, i) => {
         return (
           <GalleryImage
             url={x.hdurl}
-            key={count}
-            className={count === 1 ? "show" : "hide"}
+            key={i}
+            className={i === index ? "show" : "hide"}
           />
         );
       })}
-      <Toolbar />
+      <Toolbar
+        show={show}
+        toggle={toggle}
+        changeImage={changeImage}
+        title={images[index].title}
+        text={images[index].explanation}
+        date={images[index].date}
+      />
     </div>
   );
 }
@@ -128,48 +150,76 @@ const GalleryImage = styled.div`
 `;
 
 function Toolbar(props) {
+  const { show, toggle, changeImage, title, text, date } = props;
   return (
-    <div className="Toolbar">
-      <Controls>
-        <div className="arrow-button">&#x293A;</div>
-        <div className="content">
-          lorem ispainfsdads asdfjibhnaf asodiuabsfd asdfjlsf asdf sdf sd fgsadf
-          asdf gs sfd g zxcvs sdeflki asdf asfd lasfkidhjasflkjasfd asfgdlksjfd
-          sdkjlh ssdflkhj dslk fs lof bslgf aljv laf lajvg lajv aljvf a
+    <div className="Toolbar" onMouseEnter={toggle} onMouseLeave={toggle}>
+      <Controls className={show ? "show" : "hide"}>
+        <div className="arrow-button" onClick={() => changeImage("left")}>
+          &#x293A;
         </div>
-        <div className="arrow-button">&#x293B;</div>
+        <div className="content">
+          <Spread>
+            <h1>{title}</h1>
+            <h2>{date}</h2>
+          </Spread>
+          <p>{text}</p>
+        </div>
+        <div className="arrow-button" onClick={() => changeImage("right")}>
+          &#x293B;
+        </div>
       </Controls>
     </div>
   );
 }
+
+const Spread = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 15px;
+
+  h1,
+  h2 {
+    font-size: 2rem;
+  }
+`;
 
 const Controls = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 15vh;
-  background-color: rgba(20, 20, 20, 0.9);
+  min-height: 30vh;
+  background-color: rgba(20, 20, 20, 0.5);
   color: #fff;
   display: flex;
   flex-direction: row;
   align-items: center;
   transition: opacity 1s ease-in-out;
+  padding: 20px;
 
-  &.true {
+  &.show {
     opacity: 1;
   }
-  &.false {
+  &.hide {
     opacity: 0;
   }
 
   .content {
     flex-grow: 2;
+    padding: 0 20px;
   }
   .arrow-button {
     font-size: 3rem;
-    padding: 20px;
     cursor: pointer;
+    height: 30vh;
+    display: flex;
+    align-items: center;
+  }
+  p {
+    font-size: 1.4rem;
+    line-height: 1.7rem;
   }
 `;
 
