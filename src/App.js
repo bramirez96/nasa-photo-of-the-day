@@ -33,7 +33,7 @@ function App(props) {
         })
       )
       .catch((err) => {
-        alert(`ERROR ${err.response.status}: ${err.response.statusText}`);
+        alert(`ERROR ${err.response.status}: ${err.response.statusText} \n Sample images loading...`);
       });
   }, []);
 
