@@ -33,7 +33,9 @@ function App(props) {
         })
       )
       .catch((err) => {
-        alert(`ERROR ${err.response.status}: ${err.response.statusText} \n Sample images loading...`);
+        alert(
+          `ERROR ${err.response.status}: ${err.response.statusText} \n Sample images loading...`
+        );
       });
   }, []);
 
@@ -72,7 +74,7 @@ function App(props) {
     document.addEventListener("keydown", keyPressHandler);
     return () => {
       document.removeEventListener("keydown", keyPressHandler);
-    }
+    };
   });
 
   return (
@@ -98,6 +100,18 @@ function Carousel(props) {
   return (
     <div className="Carousel">
       {images.map((x, i) => {
+        if (x.media_type === "video") {
+          images[i] = {
+            copyright: "Saeid Parchini",
+            date: x.date,
+            explanation:
+              "What divides the north from the south? It all has to do with the spin of the Earth. On Earth's surface, the equator is the dividing line, but on Earth's sky, the dividing line is the Celestial Equator -- the equator's projection onto the sky.  You likely can't see the Earth's equator around you, but anyone with a clear night sky can find the Celestial Equator by watching stars move.  Just locate the dividing line between stars that arc north and stars that arc south.  Were you on Earth's equator, the Celestial Equator would go straight up and down.  In general, the angle between the Celestial Equator and the vertical is your latitude.  The featured image combines 325 photos taken every 30 seconds over 162 minutes. Taken soon after sunset earlier this month, moonlight illuminates a snowy and desolate scene in northwest Iran. The bright streak behind the lone tree is the planet Venus setting.  Almost Hyperspace: Random APOD Generator",
+            hdurl:
+              "https://apod.nasa.gov/apod/image/2002/StarTrailsTree_Parchini_4000.jpg",
+            media_type: "image",
+            title: "Star Trails of the North and South",
+          };
+        }
         return (
           <GalleryImage
             url={x.hdurl}
